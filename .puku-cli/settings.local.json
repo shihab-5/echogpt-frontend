@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl:*)",
+      "Bash(ls *.html)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(xargs grep:*)",
+      "Bash(powershell -Command \"Stop-Process -Id 25984 -Force\")",
+      "Bash(findstr \"echogpt:theme:v1\")",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Stop-Process -Id \\\\$_ -Force }\")",
+      "Bash(\"C:\\\\project\\\\task\\\\echogpt-frontend\\\\check-home.html\")"
+    ]
+  }
+}
