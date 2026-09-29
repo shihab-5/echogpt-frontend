@@ -12,11 +12,11 @@ export function LandingHero() {
           <MotionFadeIn className="lg:col-span-7">
             <SectionEyebrow>Multi-model AI workspace</SectionEyebrow>
             <h1 className="mt-4 text-[44px] font-semibold leading-[1.05] tracking-[-0.035em] text-fg-primary md:text-[60px] md:leading-[1.05]">
-              One workspace. Every AI perspective.
+              Switch models without losing your place.
             </h1>
             <p className="mt-5 max-w-prose text-base text-fg-secondary md:text-lg">
-              Chat with multiple AI models, compare responses, and get
-              instant help with the content you&apos;re already working with.
+              Chat with multiple AI models, switch mid-thread, and continue
+              the same conversation from any tab via the extension.
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link
@@ -57,7 +57,7 @@ function HeroStats() {
   return (
     <dl className="grid grid-cols-3 gap-4 border-t border-border pt-6 text-left">
       {[
-        { k: "Models", v: "5" },
+        { k: "Models", v: "18" },
         { k: "Quick actions", v: "5" },
         { k: "Surfaces", v: "3" },
       ].map((it) => (
