@@ -36,7 +36,7 @@ If you ever say "do everything," I will collapse P0–P8 into one build (still r
 + mock AI) | ✅ Planned | ✅ Done | — |
 | **P6** | History (`/app/history`) + Settings (`/app/settings`) | ✅ Planned | ✅ Done | — |
 | **P7** | Chrome extension concept (`/extension/*`) | ✅ Planned | ✅ Done | — |
-| **P8** | README + smoke checklist + submission gate | ✅ Planned | ❌ Not started | Approve final acceptance |
+| **P8** | README + smoke checklist + submission gate | ✅ Planned |done | Approve final acceptance |
 | **P9** | Senior audit + P0/P1 fix pass + final polish | ✅ Planned | ❌ Not started | Approve P0/P1 fix list |
 | **CM** | Compare Mode (deferred per plan.md §13) | 🟡 Deferred | ❌ Not started | Reconfirm with you first |
 
