@@ -5,6 +5,7 @@ import { cn } from "@/lib/cn";
 import { IconButton } from "@/components/ui/IconButton";
 import { Logo } from "@/components/shared/Logo";
 import { ModelSelector } from "@/components/chat/ModelSelector";
+import { CapabilitiesMenu } from "@/components/chat/CapabilitiesMenu";
 import { useActiveModel } from "@/hooks/use-active-model";
 
 interface AppHeaderProps {
@@ -52,6 +53,7 @@ export function AppHeader({ onOpenMenu, className }: AppHeaderProps) {
       <div className="hidden md:block md:flex-1" />
 
       <div className="flex items-center gap-2">
+        <CapabilitiesMenu />
         <span className="hidden text-xs text-fg-muted md:inline">Model</span>
         <ModelSelector value={model} onChange={setModel} />
       </div>
