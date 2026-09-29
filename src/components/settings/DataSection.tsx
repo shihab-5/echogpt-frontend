@@ -8,10 +8,12 @@ import { SettingsSection } from "@/components/settings/SettingsSection";
 import { Button } from "@/components/ui/Button";
 import { ResetConfirmModal } from "@/components/settings/ResetConfirmModal";
 import { clearAll } from "@/lib/storage";
+import { useUser } from "@/hooks/use-user";
 
 const STORE_CHANGE = "echogpt:store-change";
 const PREFERENCES_CHANGE = "echogpt:preferences-change";
 const THEME_CHANGE = "echogpt:theme-change";
+const USER_CHANGE = "echogpt:user-change";
 
 interface DataSectionProps {
   /** Visual density — `narrow` is used by the extension popup. */
@@ -29,9 +31,10 @@ interface DataSectionProps {
  * confirmation modal. On confirm we:
  *
  *   1. clearAll()  — removes every echogpt:* key from localStorage
- *   2. dispatch the three change events so subscribers refresh without
+ *   2. signOut()   — also clears the mock user so reset is honest
+ *   3. dispatch the four change events so subscribers refresh without
  *      a reload (clearAll() does not dispatch any events by design)
- *   3. router.replace(resetRedirect) — land on the empty workspace
+ *   4. router.replace(resetRedirect) — land on the empty workspace
  *      (web app defaults to /app; extension popup defaults to /extension
  *      so it stays inside its own frame)
  */
@@ -40,15 +43,18 @@ export function DataSection({
   resetRedirect = "/app",
 }: DataSectionProps) {
   const router = useRouter();
+  const { signOut } = useUser();
   const [open, setOpen] = useState(false);
   const isNarrow = variant === "narrow";
 
   const handleConfirm = (): void => {
+    signOut();
     clearAll();
     if (typeof window !== "undefined") {
       window.dispatchEvent(new Event(STORE_CHANGE));
       window.dispatchEvent(new Event(PREFERENCES_CHANGE));
       window.dispatchEvent(new Event(THEME_CHANGE));
+      window.dispatchEvent(new Event(USER_CHANGE));
     }
     setOpen(false);
     router.replace(resetRedirect);
@@ -68,7 +74,7 @@ export function DataSection({
           )}
         >
           <p className={cn("text-fg-secondary", isNarrow ? "text-xs" : "text-sm")}>
-            Wipes conversations, messages, preferences, and theme.
+            Wipes conversations, messages, preferences, theme, and sign-in.
           </p>
           <Button
             variant="danger"
