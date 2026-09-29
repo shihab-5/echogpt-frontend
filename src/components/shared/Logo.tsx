@@ -9,13 +9,13 @@ interface LogoProps {
 }
 
 export function Logo({ className, size = "md", hideWordmark = false }: LogoProps) {
-  const dim = size === "sm" ? 48 : size === "lg" ? 78 : 68;
+  const dim = size === "sm" ? 28 : size === "lg" ? 40 : 32;
   const text =
     size === "sm"
-      ? "text-2xl"
+      ? "text-base"
       : size === "lg"
-        ? "text-[36px] leading-[40px]"
-        : "text-[30px] leading-[34px]";
+        ? "text-2xl"
+        : "text-lg";
 
   return (
     <span className={cn("inline-flex items-center gap-2.5 font-semibold tracking-tight text-brand", className)}>
