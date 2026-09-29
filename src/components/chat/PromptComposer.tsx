@@ -1,13 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { cn } from "@/lib/cn";
 import { Textarea } from "@/components/ui/Textarea";
 import { ModelSelector } from "@/components/chat/ModelSelector";
 import { QuickActions } from "@/components/chat/QuickActions";
+import { ToolToggles } from "@/components/chat/ToolToggles";
 import { SendButton } from "@/components/chat/SendButton";
 import { useTheme } from "@/hooks/use-theme";
-import type { ModelId } from "@/types/chat";
+import type { ModelId, ToolId } from "@/types/chat";
 import type { QuickActionId } from "@/data/quick-actions";
 
 interface PromptComposerProps {
@@ -30,13 +31,21 @@ interface PromptComposerProps {
   onQuickAction?: (id: QuickActionId) => void;
   /** Hide the model selector (used by the extension's compact variant). */
   hideModelSelector?: boolean;
+  /**
+   * Per-conversation tool toggles. When paired with `onToolsChange`
+   * the tool-toggle row renders above the quick-action row. When
+   * omitted (e.g. marketing preview, extension popup) the row is hidden.
+   */
+  tools?: ReadonlyArray<ToolId>;
+  /** Required when `tools` is provided. Receives the next tools array. */
+  onToolsChange?: (next: ReadonlyArray<ToolId>) => void;
 }
 
 /**
  * Prompt composer.
  *
  * - Auto-grow textarea (1 → 6 rows by default, 3 in compact mode).
- * - Send on Enter; newline on Shift+Enter (Cmd/Ctrl+Enter also newline).
+ * - Send on Enter OR Cmd/Ctrl+Enter; newline on Shift+Enter.
  * - Model selector on the left, send button on the right.
  * - Optional quick-action row above the textarea.
  *
@@ -58,8 +67,9 @@ export function PromptComposer({
   onStop,
   onQuickAction,
   hideModelSelector = false,
+  tools,
+  onToolsChange,
 }: PromptComposerProps) {
-  const [focused, setFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const { resolvedTheme } = useTheme();
 
@@ -67,13 +77,14 @@ export function PromptComposer({
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter" && !e.shiftKey && !e.metaKey && !e.ctrlKey) {
-        e.preventDefault();
-        if (isStreaming) {
-          onStop?.();
-        } else if (canSend) {
-          onSend();
-        }
+      // Enter sends (unless Shift is held for a newline).
+      // Cmd/Ctrl+Enter also sends — matches the locked keyboard contract.
+      if (e.key !== "Enter" || e.shiftKey) return;
+      e.preventDefault();
+      if (isStreaming) {
+        onStop?.();
+      } else if (canSend) {
+        onSend();
       }
     },
     [canSend, isStreaming, onSend, onStop],
@@ -105,6 +116,13 @@ export function PromptComposer({
 
   return (
     <div className="w-full space-y-2">
+      {onToolsChange && (
+        <ToolToggles
+          enabled={tools ?? []}
+          onChange={onToolsChange}
+          variant={variant}
+        />
+      )}
       {onQuickAction && (
         <QuickActions
           onPick={(id) => {
@@ -118,8 +136,7 @@ export function PromptComposer({
 
       <div
         className={cn(
-          "rounded-lg border bg-bg-elevated transition-colors duration-fast",
-          focused ? "border-brand" : "border-border-strong",
+          "rounded-lg border border-border-strong bg-bg-elevated transition-colors duration-fast",
           padding,
           "pb-[max(0.75rem,env(safe-area-inset-bottom))]",
         )}
@@ -134,8 +151,6 @@ export function PromptComposer({
           aria-label="Prompt"
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={onKeyDown}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
           className="min-h-[24px]"
         />
         <div className="mt-2 flex items-center justify-between gap-2">
