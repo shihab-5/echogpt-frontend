@@ -2,6 +2,7 @@
 
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
+import { EMPTY_COPY } from "@/data/empty-copy";
 
 interface ResetConfirmModalProps {
   open: boolean;
@@ -23,17 +24,17 @@ export function ResetConfirmModal({
     <Modal
       open={open}
       onClose={onClose}
-      title="Reset workspace?"
-      description="This wipes every conversation, message, preference, and theme stored on this device."
+      title={EMPTY_COPY.reset.title}
+      description={EMPTY_COPY.reset.body}
       tone="danger"
       size="sm"
       footer={
         <>
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {EMPTY_COPY.reset.cancel}
           </Button>
           <Button variant="danger" onClick={onConfirm}>
-            Reset workspace
+            {EMPTY_COPY.reset.confirm}
           </Button>
         </>
       }
@@ -42,6 +43,7 @@ export function ResetConfirmModal({
         <li>All conversations and their messages</li>
         <li>Theme, density, and interface preferences</li>
         <li>Default model choice</li>
+        <li>Sign-in (if any)</li>
       </ul>
       <p className="mt-3">
         There is no undo. The next page load will start you on a clean

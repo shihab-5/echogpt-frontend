@@ -1,5 +1,6 @@
 import { SearchX } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { EMPTY_COPY } from "@/data/empty-copy";
 
 interface HistoryNoResultsProps {
   /** The query that produced zero matches. */
@@ -19,11 +20,10 @@ export function HistoryNoResults({ query, onClear }: HistoryNoResultsProps) {
         <SearchX size={18} aria-hidden="true" />
       </div>
       <h2 className="text-balance text-base font-semibold text-fg-primary">
-        No results for &ldquo;{query}&rdquo;
+        {EMPTY_COPY.search.title.replace(".", "")} for &ldquo;{query}&rdquo;
       </h2>
       <p className="mt-1 max-w-sm text-sm text-fg-secondary">
-        Try a shorter or different keyword, or clear the search to see
-        everything.
+        {EMPTY_COPY.search.body}
       </p>
       <Button
         variant="secondary"
@@ -31,7 +31,7 @@ export function HistoryNoResults({ query, onClear }: HistoryNoResultsProps) {
         onClick={onClear}
         className="mt-5"
       >
-        Clear search
+        {EMPTY_COPY.search.cta}
       </Button>
     </div>
   );

@@ -71,7 +71,7 @@ export function EmptyState({ variant = "default" }: EmptyStateProps) {
       <div className="w-full">
         {!isCompact && (
           <div className="mb-5 inline-flex h-9 items-center gap-2 rounded-full border border-border-strong bg-bg-elevated px-3 text-xs text-fg-secondary">
-            <Sparkles size={14} aria-hidden="true" className="text-brand" />
+            <Sparkles size={14} aria-hidden="true" className="text-fg-secondary" />
             <span>EchoGPT — a focused multi-model workspace</span>
           </div>
         )}

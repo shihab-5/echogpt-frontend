@@ -17,7 +17,7 @@ export function AboutSection({ variant = "default" }: AboutSectionProps) {
     <SettingsSection
       eyebrow="About"
       title={BUILD_INFO.appName}
-      caption="A demo chat workspace with a mock AI pipeline. Built as a portfolio piece."
+      caption="A demo chat workspace with a mock AI pipeline. Sign-in is local-only — credentials never leave your browser."
       variant={variant}
     >
       <dl className="grid grid-cols-2 gap-2 text-xs">
@@ -31,7 +31,7 @@ export function AboutSection({ variant = "default" }: AboutSectionProps) {
           href="https://github.com"
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-brand transition-opacity duration-fast hover:opacity-80"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-fg-primary underline-offset-2 transition-opacity duration-fast hover:opacity-80 hover:underline"
         >
           <span>View on GitHub</span>
           <ExternalLink size={11} aria-hidden="true" />

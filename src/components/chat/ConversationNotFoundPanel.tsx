@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { EMPTY_COPY } from "@/data/empty-copy";
 
 interface ConversationNotFoundPanelProps {
   /** The bogus id the user landed on, shown verbatim for context. */
@@ -25,7 +26,7 @@ export function ConversationNotFoundPanel({
           404 · Conversation
         </p>
         <h1 className="mt-2 text-balance text-2xl font-semibold tracking-tight text-fg-primary">
-          We couldn&rsquo;t find that conversation
+          {EMPTY_COPY.chatNotFound.title}
         </h1>
         <p className="mt-2 text-sm text-fg-secondary">
           The id{" "}
@@ -36,7 +37,7 @@ export function ConversationNotFoundPanel({
           <Link href="/app">
             <Button variant="secondary" size="md">
               <ArrowLeft size={14} aria-hidden="true" />
-              Back to workspace
+              {EMPTY_COPY.chatNotFound.cta}
             </Button>
           </Link>
         </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MessageSquare, Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { EMPTY_COPY } from "@/data/empty-copy";
 
 /**
  * Empty state for /app/history. Shown when the conversation store is
@@ -15,11 +16,10 @@ export function HistoryEmpty() {
         <MessageSquare size={18} aria-hidden="true" />
       </div>
       <h2 className="text-balance text-base font-semibold text-fg-primary">
-        No conversations yet
+        {EMPTY_COPY.history.title}
       </h2>
       <p className="mt-1 max-w-sm text-sm text-fg-secondary">
-        Start a thread from the workspace and it will show up here. History
-        is saved to this device only.
+        {EMPTY_COPY.history.body}
       </p>
       <Link href="/app" className="mt-5">
         <Button variant="primary" size="md">

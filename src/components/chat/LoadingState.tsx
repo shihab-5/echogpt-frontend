@@ -14,9 +14,9 @@ import { StreamingIndicator } from "@/components/chat/StreamingIndicator";
 export function LoadingState() {
   return (
     <div className="flex items-center gap-2 px-4 py-3 text-sm text-fg-secondary">
-      <Sparkles size={14} aria-hidden="true" className="text-brand" />
+      <Sparkles size={14} aria-hidden="true" className="text-fg-secondary" />
       <span>Generating</span>
-      <StreamingIndicator className="text-brand" />
+      <StreamingIndicator className="text-fg-secondary" />
     </div>
   );
 }

@@ -16,7 +16,7 @@ export function HistoryHeader({ total, className }: HistoryHeaderProps) {
   return (
     <header className={className}>
       <div className="flex items-center gap-2 text-xs text-fg-muted">
-        <History size={14} aria-hidden="true" className="text-brand" />
+        <History size={14} aria-hidden="true" className="text-fg-secondary" />
         <span>History</span>
       </div>
       <h1 className="mt-2 text-balance text-2xl font-semibold tracking-tight text-fg-primary">

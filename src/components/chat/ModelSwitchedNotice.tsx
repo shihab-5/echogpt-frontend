@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useActiveModel } from "@/hooks/use-active-model";
 import { getModel } from "@/data/models";
+import { EMPTY_COPY } from "@/data/empty-copy";
 
 interface ModelSwitchedNoticeProps {
   /** Auto-dismiss duration in ms. Defaults to 4000. */
@@ -62,7 +63,7 @@ export function ModelSwitchedNotice({
       )}
     >
       <Check size={12} aria-hidden="true" />
-      <span>Switched to {noticeModel}</span>
+      <span>{EMPTY_COPY.modelSwitched(noticeModel)}</span>
       <button
         type="button"
         onClick={() => setNoticeModel(null)}
