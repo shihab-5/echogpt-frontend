@@ -26,6 +26,10 @@
   --danger-bg: rgba(248, 113, 113, 0.08);
   --success: #22c55e;
   --success-bg: rgba(34, 197, 94, 0.08);
+  --disabled-fg: #52525b;
+  --disabled-bg: #18181b;
+  --chrome-dot: #3a3a3a;
+  --chrome-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   --focus-ring: 0 0 0 2px var(--brand-ring);
 
   color-scheme: dark;
@@ -42,6 +46,10 @@
   --text-primary: #0a0a0a;
   --text-secondary: #52525b;
   --text-muted: #71717a;
+  --disabled-fg: #a1a1aa;
+  --disabled-bg: #f4f4f5;
+  --chrome-dot: #d4d4d8;
+  --chrome-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   color-scheme: light;
 }
 
@@ -66,6 +74,9 @@
   --color-success-bg: var(--success-bg);
   --color-border-default: var(--border);
   --color-border-strong: var(--border-strong);
+  --color-disabled-fg: var(--disabled-fg);
+  --color-disabled-bg: var(--disabled-bg);
+  --color-chrome-dot: var(--chrome-dot);
 
   --radius-card: 10px;
   --radius-control: 6px;
@@ -73,6 +84,13 @@
 
   --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, "JetBrains Mono", monospace;
+
+  /* Motion timing tokens (locked in plan §18) */
+  --duration-instant: 80ms;
+  --duration-fast: 120ms;
+  --duration-default: 200ms;
+  --duration-slow: 280ms;
+  --duration-section: 360ms;
 }
 
 /* Base */

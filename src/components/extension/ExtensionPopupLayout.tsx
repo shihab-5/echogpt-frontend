@@ -33,9 +33,9 @@ export function ExtensionPopupLayout({
     >
       {/* Chrome dots — purely decorative */}
       <div className="flex items-center gap-1.5 border-b border-border bg-bg-elevated px-3 py-2">
-        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-[#3a3a3a]" />
-        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-[#3a3a3a]" />
-        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-[#3a3a3a]" />
+        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-chrome-dot" />
+        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-chrome-dot" />
+        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-chrome-dot" />
         <span className="ml-2 text-[11px] font-medium text-fg-muted">
           EchoGPT · popup
         </span>
