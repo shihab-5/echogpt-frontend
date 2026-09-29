@@ -1,4 +1,4 @@
-import type { Message, ModelId } from "@/types/chat";
+import type { Message, ModelId, ToolId } from "@/types/chat";
 import { buildAssistantMessage } from "@/data/messages";
 
 /**
@@ -106,10 +106,39 @@ function replyFor(prompt: string, model: ModelId): string {
   }
 }
 
+/**
+ * Compose the final reply text with optional tool acknowledgment.
+ *
+ * - When any tool is active, prepend a `[Tools active: …]` line so the
+ *   user can see the toggle state persisted into the response.
+ * - When the calculator tool is active AND the prompt contains a digit,
+ *   append a placeholder line that explicitly states the math is not
+ *   performed in this prototype. This avoids pretending the calculator
+ *   is a real backend (see `project_rules.md` §25).
+ */
+function withTools(
+  prompt: string,
+  base: string,
+  tools: ReadonlyArray<ToolId>,
+): string {
+  if (tools.length === 0) return base;
+  const head = `[Tools active: ${tools.join(", ")}]\n\n`;
+  if (tools.includes("calculator") && /\d/.test(prompt)) {
+    return `${head}${base}\n\nCalculator: mocked — exact math not performed in this prototype.`;
+  }
+  return `${head}${base}`;
+}
+
 export interface GenerateOptions {
   signal?: AbortSignal;
   /** When true, ~3% of calls throw a MockAiError. */
   simulateFailure?: boolean;
+  /**
+   * Per-conversation tool toggles. When non-empty, the canned reply
+   * is prefixed with `[Tools active: …]` (and the calculator appends a
+   * placeholder line for numeric prompts).
+   */
+  tools?: ReadonlyArray<ToolId>;
 }
 
 export async function generateMockResponse(
@@ -117,10 +146,11 @@ export async function generateMockResponse(
   model: ModelId,
   options: GenerateOptions = {},
 ): Promise<Message> {
-  const { signal, simulateFailure = false } = options;
+  const { signal, simulateFailure = false, tools = [] } = options;
   await sleep(rand(400, 900), signal);
   if (simulateFailure && Math.random() < 0.03) {
     throw new MockAiError();
   }
-  return buildAssistantMessage(replyFor(prompt, model), model);
+  const composed = withTools(prompt, replyFor(prompt, model), tools);
+  return buildAssistantMessage(composed, model);
 }

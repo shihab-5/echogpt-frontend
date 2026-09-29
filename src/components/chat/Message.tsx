@@ -76,7 +76,7 @@ export function Message({
           "relative",
           isUser
             ? "bg-bg-card border-l-2 border-fg-muted"
-            : "bg-transparent border-l-2 border-brand",
+            : "bg-transparent border-l-2 border-border-strong",
           isError && "border-danger",
         )}
       >

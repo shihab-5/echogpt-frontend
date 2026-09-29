@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useSyncExternalStore } from "react";
-import type { Conversation, Message, ModelId } from "@/types/chat";
+import type { Conversation, Message, ModelId, ToolId } from "@/types/chat";
 import { getJSON, setJSON } from "@/lib/storage";
 import {
   createEmptyConversation,
@@ -115,6 +115,21 @@ export function useConversations() {
     });
   }, []);
 
+  const setTools = useCallback(
+    (id: string, tools: ReadonlyArray<ToolId>): void => {
+      const current = readStore();
+      writeStore({
+        conversations: current.conversations.map((c) =>
+          c.id === id
+            ? { ...c, tools: [...tools], updatedAt: Date.now() }
+            : c,
+        ),
+        messages: current.messages,
+      });
+    },
+    [],
+  );
+
   const appendMessage = useCallback(
     (conversationId: string, message: Message): void => {
       const current = readStore();
@@ -187,6 +202,7 @@ export function useConversations() {
     remove,
     setTitle,
     setModel,
+    setTools,
     appendMessage,
     replaceLastAssistant,
     reset,

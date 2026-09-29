@@ -80,6 +80,12 @@ export interface Conversation {
   createdAt: number;
   updatedAt: number;
   preview: string;
+  /**
+   * Per-conversation tool toggles. Empty array means "no tools active".
+   * Toggles are bound to a single conversation so different threads
+   * can run with different capabilities without leaking state.
+   */
+  tools?: ReadonlyArray<ToolId>;
 }
 
 export type Density = "comfortable" | "compact";
@@ -90,4 +96,31 @@ export interface Preferences {
   showModelBadge: boolean;
   sendOnEnter: boolean;
   streamReplies: boolean;
+}
+
+/**
+ * Mock-only tool identifiers attached to a conversation. There is no
+ * real tool execution — when a tool is "active" the canned reply simply
+ * acknowledges it via a `[Tools active: …]` prefix line. See
+ * `src/lib/mock-ai.ts`.
+ */
+export type ToolId =
+  | "web-search"
+  | "code-interpreter"
+  | "image-generation"
+  | "calculator";
+
+/**
+ * Mock user object for the local-only sign-in flow. There is no real
+ * auth: credentials are stored verbatim in `localStorage` and never
+ * leave the browser. The shape is intentionally tiny — just enough to
+ * drive an avatar + a dropdown menu.
+ */
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  /** 1-2 initials derived from `name`. Stored so the avatar never recomputes. */
+  initials: string;
+  createdAt: number;
 }

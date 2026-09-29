@@ -1,18 +1,31 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Message, ModelId } from "@/types/chat";
+import type { Message, ModelId, ToolId } from "@/types/chat";
 import { generateMockResponse } from "@/lib/mock-ai";
 import { buildUserMessage } from "@/data/messages";
 
 export type ChatStatus = "idle" | "pending" | "error";
 
+export interface SendOptions {
+  /**
+   * Per-conversation tool toggles forwarded to the mock AI. When any
+   * tool is active the canned reply is prefixed with `[Tools active: …]`.
+   */
+  tools?: ReadonlyArray<ToolId>;
+}
+
 export interface UseChatStream {
   status: ChatStatus;
-  send: (prompt: string, model: ModelId) => Promise<Message | null>;
+  send: (
+    prompt: string,
+    model: ModelId,
+    options?: SendOptions,
+  ) => Promise<Message | null>;
   regenerate: (
     lastPrompt: string,
     model: ModelId,
+    options?: SendOptions,
   ) => Promise<Message | null>;
   abort: () => void;
   reset: () => void;
@@ -44,7 +57,11 @@ export function useChatStream(): UseChatStream {
   useEffect(() => () => abort(), [abort]);
 
   const send = useCallback(
-    async (prompt: string, model: ModelId): Promise<Message | null> => {
+    async (
+      prompt: string,
+      model: ModelId,
+      options: SendOptions = {},
+    ): Promise<Message | null> => {
       abort();
       const controller = new AbortController();
       abortRef.current = controller;
@@ -53,6 +70,7 @@ export function useChatStream(): UseChatStream {
       try {
         const result = await generateMockResponse(prompt, model, {
           signal: controller.signal,
+          tools: options.tools,
         });
         setStatus("idle");
         return result;
@@ -71,8 +89,12 @@ export function useChatStream(): UseChatStream {
   );
 
   const regenerate = useCallback(
-    async (lastPrompt: string, model: ModelId): Promise<Message | null> => {
-      return send(lastPrompt, model);
+    async (
+      lastPrompt: string,
+      model: ModelId,
+      options: SendOptions = {},
+    ): Promise<Message | null> => {
+      return send(lastPrompt, model, options);
     },
     [send],
   );

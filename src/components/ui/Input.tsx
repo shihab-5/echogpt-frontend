@@ -19,7 +19,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         "focus-visible:outline-none",
         invalid
           ? "border-danger focus-visible:shadow-[0_0_0_2px_var(--danger-bg)]"
-          : "border-border-strong hover:border-fg-muted focus-visible:border-brand focus-visible:shadow-[var(--focus-ring)]",
+          : "border-border-strong hover:border-fg-muted focus-visible:shadow-[var(--focus-ring)]",
         "disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}

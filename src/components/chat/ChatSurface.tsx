@@ -71,6 +71,20 @@ export function ChatSurface({
   const conversation = conv?.conversation;
   const isStreaming = status === "pending";
 
+  // Per-conversation tool toggles. Persisted on the conversation record
+  // (see `Conversation.tools`) so different threads can run with
+  // different capabilities without leaking state across them.
+  const tools = useMemo<ReadonlyArray<import("@/types/chat").ToolId>>(
+    () => conversation?.tools ?? [],
+    [conversation?.tools],
+  );
+  const handleToolsChange = useCallback(
+    (next: ReadonlyArray<import("@/types/chat").ToolId>) => {
+      conv?.setTools(next);
+    },
+    [conv],
+  );
+
   // Find the last assistant message. Used to attach the Regenerate
   // handler to the most-recent assistant bubble only.
   const lastAssistant = useMemo<Msg | null>(() => {
@@ -103,7 +117,7 @@ export function ChatSurface({
     conv?.append(placeholder);
     setPendingAssistantId(placeholder.id);
 
-    const result = await send(text, model);
+    const result = await send(text, model, { tools });
 
     if (result) {
       // Replace the placeholder with the real response.
@@ -126,7 +140,7 @@ export function ChatSurface({
       });
       setPendingAssistantId(null);
     }
-  }, [composerValue, conv, send, model, errorMessage]);
+  }, [composerValue, conv, send, model, errorMessage, tools]);
 
   // Regenerate the last assistant message by replaying the last user prompt.
   const handleRegenerate = useCallback(async () => {
@@ -141,7 +155,7 @@ export function ChatSurface({
     conv?.append(placeholder);
     setPendingAssistantId(placeholder.id);
 
-    const result = await send(lastUserPrompt, model);
+    const result = await send(lastUserPrompt, model, { tools });
 
     if (result) {
       conv?.replaceLastAssistant(result);
@@ -152,7 +166,7 @@ export function ChatSurface({
     } else {
       setPendingAssistantId(null);
     }
-  }, [lastUserPrompt, conv, send, model, errorMessage]);
+  }, [lastUserPrompt, conv, send, model, errorMessage, tools]);
 
   // Retry: re-attempt the last assistant message generation.
   const handleRetry = useCallback(async () => {
@@ -243,6 +257,8 @@ export function ChatSurface({
             isStreaming={isStreaming}
             onStop={handleStop}
             onQuickAction={handleQuickAction}
+            tools={tools}
+            onToolsChange={handleToolsChange}
             placeholder={lastUserPrompt ? "Ask a follow-up…" : "Ask anything…"}
           />
         </div>
@@ -259,7 +275,7 @@ function EmptyThread({ onPick }: { onPick: (text: string) => void }) {
   return (
     <div className="mb-8 mt-4 rounded-lg border border-border-strong bg-bg-elevated p-5">
       <div className="mb-3 inline-flex items-center gap-2 text-xs text-fg-secondary">
-        <Sparkles size={14} aria-hidden="true" className="text-brand" />
+        <Sparkles size={14} aria-hidden="true" className="text-fg-secondary" />
         <span>Start the thread</span>
       </div>
       <h2 className="text-balance text-lg font-semibold tracking-tight text-fg-primary">
